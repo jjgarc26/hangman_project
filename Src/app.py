@@ -1,20 +1,30 @@
-from random_word_generator import hangman_word, encrypted_version
+from random_word_generator import hangman_word
 from validator import check_for_letter, current_encrypted_version
+from stages import stages
 
-# This will display the person's life span
+# Main game
 print('Welcome to Hangman Game')
-amount_of_chances = 6
+amount_of_chances = 7
+stage_count = 0
 
+# Where user will input there choice
 while amount_of_chances > 0:
+    print(stages[stage_count])
     print(amount_of_chances)
     print(current_encrypted_version)
     user_guess = input('Guess a letter: ')
-    if hangman_word.find(user_guess):
+    # If user is correct, we will reveal word in encrypted version
+    if user_guess in hangman_word:
         check_for_letter(user_guess)
+        # If user guesses all words, while loop will break to get out of loop
+        if "*" not in ''.join(current_encrypted_version):
+            break
+    # If incorrect, will reduce amount of chances
     else:
         amount_of_chances -= 1
+        stage_count += 1
 
-print(hangman_word)
-print(encrypted_version)
-nw = encrypted_version.replace('o', encrypted_version[2])
-print(nw)
+if amount_of_chances == 0:
+    print(f"Sorry, the word was: {hangman_word}")
+else:
+    print(f"congratulations, you solves the word:  {hangman_word}")
